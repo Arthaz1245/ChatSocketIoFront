@@ -1,22 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
 import { Stack } from "react-bootstrap";
-import { findUser } from "../../features/authSlice";
-
 import moment from "moment/moment";
 import InputEmoji from "react-input-emoji";
-const ChatBox = ({ currentChat, userId, socket }) => {
-  const messages = useSelector((state) => state.chat.messages);
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { ChatContext } from "../../context/ChatContext";
+import { useFetchRecipientUser } from "../../hooks/useFetchRecipientUser";
+const ChatBox = () => {
+  const { user } = useContext(AuthContext);
+  const { currentChat, messages, isMessagesLoading, sendTextMessage } =
+    useContext(ChatContext);
+  const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
-  const chatId = currentChat?._id;
-  const dispatch = useDispatch();
-  const userById = useSelector((state) => state.auth.userById);
-  const messageStatus = useSelector((state) => state.chat.status);
-  const recipientId = currentChat?.members?.find((id) => id !== userId);
-
+  if (!recipientUser) {
+    <p style={{ textAlign: "center", width: "100%" }}>
+      Not conversation selected yet
+    </p>;
+  }
+  if (isMessagesLoading) {
+    <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>;
+  }
   return (
     <Stack gap={4} className="chat-box">
       <div className="chat-header">
-        <strong>{userById?.name}</strong>
+        <strong>{recipientUser?.name}</strong>
       </div>
       <Stack gap={3} className="messages">
         {messages &&
@@ -24,7 +30,7 @@ const ChatBox = ({ currentChat, userId, socket }) => {
             <Stack
               key={index}
               className={`${
-                message?.senderId === userId
+                message?.senderId === user?._id
                   ? "message self align-self-end flex-grow-0"
                   : "message align self-start flex-grow-0"
               }`}
@@ -43,7 +49,12 @@ const ChatBox = ({ currentChat, userId, socket }) => {
           fontFamily="nunito"
           borderColor="rga(72,112,223,0.2)"
         />
-        <button className="send-btn" onClick={handleSendMessage}>
+        <button
+          className="send-btn"
+          onClick={() =>
+            sendTextMessage(textMessage, user, currentChat._id, setTextMessage)
+          }
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
