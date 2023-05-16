@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 
-import { baseUrl } from "../utils/services";
+import { baseUrl, postRequest } from "../utils/services";
 
 export const AuthContext = createContext();
 

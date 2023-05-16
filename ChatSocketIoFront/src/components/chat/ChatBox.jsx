@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { createMessage, getMessages } from "../../features/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Stack } from "react-bootstrap";
 import { findUser } from "../../features/authSlice";
@@ -14,42 +12,6 @@ const ChatBox = ({ currentChat, userId, socket }) => {
   const userById = useSelector((state) => state.auth.userById);
   const messageStatus = useSelector((state) => state.chat.status);
   const recipientId = currentChat?.members?.find((id) => id !== userId);
-
-  useEffect(() => {
-    dispatch(findUser(recipientId));
-    dispatch(getMessages(chatId));
-  }, [dispatch, recipientId, chatId]);
-
-  useEffect(() => {
-    socket.on("getMessage", (data) => {
-      dispatch(createMessage(data));
-    });
-
-    return () => {
-      socket.off("getMessage");
-    };
-  }, [dispatch, socket]);
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    const message = {
-      chatId: chatId,
-      senderId: userId,
-      text: textMessage,
-    };
-
-    socket.emit("sendMessage", { ...message, recipientId });
-    dispatch(getMessages(chatId));
-    setTextMessage("");
-  };
-
-  if (!userById)
-    return (
-      <p style={{ textAlign: "center", width: "100%" }}>
-        No converstation yet ...
-      </p>
-    );
-  if (messageStatus === "loading")
-    return <p style={{ textAlign: "center", width: "100%" }}>LoadingChat...</p>;
 
   return (
     <Stack gap={4} className="chat-box">

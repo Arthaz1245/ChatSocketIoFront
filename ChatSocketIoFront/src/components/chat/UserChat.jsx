@@ -1,34 +1,10 @@
 import avarter from "../../assets/avarter.svg";
-import axios from "axios";
-import { useEffect, useState } from "react";
+
 import { Stack } from "react-bootstrap";
-import { deleteChat } from "../../features/chatSlice";
-import { useDispatch } from "react-redux";
-const UserChat = ({ chat, userId, usersOnline }) => {
-  const [recipientUser, setRecipientUser] = useState(null);
 
-  const [error, setError] = useState(null);
-  const recipientId = chat?.members.find((id) => id !== userId);
-  const isOnline = usersOnline?.some((user) => user?.userId === recipientId);
-  const dispatch = useDispatch();
-  const handleDeleteChat = (id) => {
-    dispatch(deleteChat(id));
-  };
-  useEffect(() => {
-    const getUser = async () => {
-      if (!recipientId) return null;
-      const response = await axios.get(
-        `http://localhost:5500/users/find/${recipientId}`
-      );
-
-      if (response.error) {
-        return setError(error);
-      }
-      setRecipientUser(response.data);
-    };
-    getUser();
-  }, []);
-
+import { useFetchRecipientUser } from "../../hooks/useFetchRecipientUser";
+const UserChat = ({ chat, user }) => {
+  const { recipientUser } = useFetchRecipientUser(chat, user);
   return (
     <Stack
       direction="horizontal"
@@ -37,9 +13,9 @@ const UserChat = ({ chat, userId, usersOnline }) => {
       role="button"
     >
       <div className="d-flex">
-        <div>
+        {/* <div>
           <button onClick={() => handleDeleteChat(chat._id)}>x</button>
-        </div>
+        </div> */}
         <div className="me-2">
           <img src={avarter} height="35px" />
         </div>

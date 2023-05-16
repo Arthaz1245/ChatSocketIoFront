@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { baseUrl, getRequest } from "../utils/services";
 
-export const useFetchRecipientUser = ({ chat, userId }) => {
+export const useFetchRecipientUser = ({ chat, user }) => {
   const [recipientUser, setRecipientUser] = useState(null);
   const [error, setError] = useState(null);
-  const recipientId = chat?.members.find((id) => id !== userId);
+  const recipientId = chat?.members.find((id) => id !== user?._id);
   console.log(chat);
   useEffect(() => {
     const getUser = async () => {
       if (!recipientId) return null;
-      const response = await axios.get(
-        `http://localhost:5500/users/find/${recipientId}`
-      );
+      const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
       if (response.error) {
-        return setError(error);
+        return setError(response);
       }
       setRecipientUser(response);
     };
