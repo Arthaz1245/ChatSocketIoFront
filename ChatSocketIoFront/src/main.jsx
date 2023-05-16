@@ -6,14 +6,15 @@ import { Provider } from "react-redux";
 import App from "./App";
 
 import "./index.scss";
+import { AuthContextProvider } from "./context/AuthContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <AuthContextProvider>
       <Router>
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
       </Router>
-    </Provider>
+    </AuthContextProvider>
   </React.StrictMode>
 );

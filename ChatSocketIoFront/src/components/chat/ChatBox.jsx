@@ -24,11 +24,6 @@ const ChatBox = ({ currentChat, userId, socket }) => {
     socket.on("getMessage", (data) => {
       dispatch(createMessage(data));
     });
-    // socket.on("messageSentConfirmation", (message) => {
-    //   console.log(message);
-
-    //   //dispatch(createMessage(message));
-    // });
 
     return () => {
       socket.off("getMessage");
@@ -41,8 +36,9 @@ const ChatBox = ({ currentChat, userId, socket }) => {
       senderId: userId,
       text: textMessage,
     };
+
     socket.emit("sendMessage", { ...message, recipientId });
-    //dispatch(getMessages(chatId));
+    dispatch(getMessages(chatId));
     setTextMessage("");
   };
 

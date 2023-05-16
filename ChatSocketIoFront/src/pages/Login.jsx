@@ -1,28 +1,14 @@
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
-import { loginUser } from "../features/authSlice";
-import { useNavigate } from "react-router-dom";
+
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 const Login = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-  const auth = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (auth._id) {
-      navigate("/");
-    }
-  }, [auth._id, navigate]);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(loginUser(user));
-  };
+  const { loginUser, loginError, loginInfo, updateLoginInfo, isLoginLoading } =
+    useContext(AuthContext);
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={loginUser}>
         <Row
           style={{
             height: "100vh",
@@ -36,19 +22,23 @@ const Login = () => {
               <Form.Control
                 type="email"
                 placeholder="Email"
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                onChange={(e) =>
+                  updateLoginInfo({ ...loginInfo, email: e.target.value })
+                }
               />
               <Form.Control
                 type="password"
                 placeholder="Password"
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                onChange={(e) =>
+                  updateLoginInfo({ ...loginInfo, password: e.target.value })
+                }
               />
               <Button type="submit" variant="success">
-                {auth.loginStatus === "pending" ? "Submitting" : "Login"}
+                {isLoginLoading ? "Getting you in... " : "Login"}
               </Button>
-              {auth.loginStatus === "rejected" && (
+              {loginError?.error && (
                 <Alert variant="danger">
-                  <p>An error has occurred</p>
+                  <p>{loginError?.message}</p>
                 </Alert>
               )}
             </Stack>

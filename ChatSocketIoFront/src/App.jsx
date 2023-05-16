@@ -5,18 +5,19 @@ import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import NavBar from "./components/NavBar";
 import { Container } from "react-bootstrap";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 function App() {
-  const auth = useSelector((state) => state.auth);
-  const name = auth.name;
-  const isAuth = auth._id;
+  const { user } = useContext(AuthContext);
+
   return (
     <>
-      <NavBar name={name} />
+      <NavBar />
       <Container>
         <Routes>
-          <Route path="/" element={isAuth ? <Chat /> : <Login />} />
-          <Route path="/register" element={isAuth ? <Chat /> : <Register />} />
-          <Route path="/login" element={isAuth ? <Chat /> : <Login />} />
+          <Route path="/" element={user ? <Chat /> : <Login />} />
+          <Route path="/register" element={user ? <Chat /> : <Register />} />
+          <Route path="/login" element={user ? <Chat /> : <Login />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>

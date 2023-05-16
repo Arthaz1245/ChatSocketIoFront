@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Nav, Navbar, Stack } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../features/authSlice";
 import { Link } from "react-router-dom";
-const NavBar = ({ name }) => {
-  const auth = useSelector((state) => state.auth);
-
-  const dispatch = useDispatch();
+import { AuthContext } from "../context/AuthContext";
+const NavBar = () => {
+  const { user, logoutUser } = useContext(AuthContext);
   return (
     <Navbar bg="dark" className="mb-4" style={{ height: "3.75rem" }}>
       <Container>
@@ -15,8 +12,10 @@ const NavBar = ({ name }) => {
             Chatsapp
           </Link>
         </h2>
-        {auth._id && <span className="text-warning">Logged in as {name}</span>}
-        {!auth._id ? (
+        {user && (
+          <span className="text-warning">Logged in as {user?.name}</span>
+        )}
+        {!user && (
           <>
             <Nav>
               <Stack direction="horizontal" gap={3}>
@@ -32,16 +31,15 @@ const NavBar = ({ name }) => {
               </Stack>
             </Nav>
           </>
-        ) : (
+        )}
+        {user && (
           <>
             <Nav>
               <Stack direction="horizontal" gap={3}>
                 <Link
                   to="/login"
                   className="link-light text-decoration-none"
-                  onClick={() => {
-                    dispatch(logoutUser(null));
-                  }}
+                  onClick={() => logoutUser()}
                 >
                   Logout
                 </Link>

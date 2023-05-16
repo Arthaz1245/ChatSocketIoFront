@@ -1,29 +1,18 @@
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import { registerUser } from "../features/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../context/AuthContext";
 const Register = () => {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const auth = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (auth._id) {
-      navigate("/");
-    }
-  }, [auth._id, navigate]);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(registerUser(user));
-  };
+  const {
+    registerInfo,
+    updateRegisterInfo,
+    registerUser,
+    registerError,
+    isRegisterLoading,
+  } = useContext(AuthContext);
+
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={registerUser}>
         <Row
           style={{
             height: "100vh",
@@ -37,24 +26,36 @@ const Register = () => {
               <Form.Control
                 type="text"
                 placeholder="Name"
-                onChange={(e) => setUser({ ...user, name: e.target.value })}
+                onChange={(e) => {
+                  updateRegisterInfo({ ...registerInfo, name: e.target.value });
+                }}
               />
               <Form.Control
                 type="email"
                 placeholder="Email"
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                onChange={(e) => {
+                  updateRegisterInfo({
+                    ...registerInfo,
+                    email: e.target.value,
+                  });
+                }}
               />
               <Form.Control
                 type="password"
                 placeholder="Password"
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                onChange={(e) => {
+                  updateRegisterInfo({
+                    ...registerInfo,
+                    password: e.target.value,
+                  });
+                }}
               />
               <Button type="submit" variant="success">
-                {auth.registerStatus === "pending" ? "Submitting" : "Register"}
+                {isRegisterLoading ? "Creating your account" : "Register"}
               </Button>
-              {auth.registerStatus === "rejected" && (
+              {registerError?.error && (
                 <Alert variant="danger">
-                  <p>An error has occurred</p>
+                  <p>{registerError?.message}</p>
                 </Alert>
               )}
             </Stack>
