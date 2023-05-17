@@ -1,11 +1,9 @@
-import { createChat } from "../../features/chatSlice";
 import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import { AuthContext } from "../../context/AuthContext";
 const PotentialChats = () => {
   const { user } = useContext(AuthContext);
-  const { potentialChats } = useContext(ChatContext);
-
+  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
   return (
     <>
       <div className="all-users">
@@ -20,9 +18,9 @@ const PotentialChats = () => {
                 {u.name}
                 <span
                   className={
-                    usersOnline?.some((user) => user?.userId === u?._id)
+                    onlineUsers?.some((user) => user?.userId === u?._id)
                       ? "user-online"
-                      : ""
+                      : "user-offline"
                   }
                 ></span>
               </div>

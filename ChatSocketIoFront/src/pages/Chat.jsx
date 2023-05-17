@@ -26,12 +26,7 @@ const Chat = () => {
             })}
           </Stack>
 
-          <ChatBox
-            currentChat={currentChat}
-            userId={userId}
-            auth={auth}
-            socket={socket}
-          />
+          <ChatBox />
         </Stack>
       )}
     </Container>

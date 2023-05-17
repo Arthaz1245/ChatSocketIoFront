@@ -10,6 +10,7 @@ const ChatBox = () => {
   const { currentChat, messages, isMessagesLoading, sendTextMessage } =
     useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
+  console.log(currentChat?._id);
   const [textMessage, setTextMessage] = useState("");
   if (!recipientUser) {
     <p style={{ textAlign: "center", width: "100%" }}>
@@ -19,6 +20,7 @@ const ChatBox = () => {
   if (isMessagesLoading) {
     <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>;
   }
+
   return (
     <Stack gap={4} className="chat-box">
       <div className="chat-header">
@@ -52,7 +54,7 @@ const ChatBox = () => {
         <button
           className="send-btn"
           onClick={() =>
-            sendTextMessage(textMessage, user, currentChat._id, setTextMessage)
+            sendTextMessage(textMessage, user, currentChat?._id, setTextMessage)
           }
         >
           <svg
