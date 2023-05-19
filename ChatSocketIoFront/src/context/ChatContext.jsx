@@ -114,7 +114,7 @@ export const ChatContextProvider = ({ children, user }) => {
       }
     };
     getUserChats();
-  }, [user]);
+  }, [user, notifications]);
 
   const updateCurrentChat = useCallback((chat) => {
     setCurrentChat(chat);
@@ -208,12 +208,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
         return isDesiredChat;
       });
-      if (!chatDesired) {
-        const chatToBeCreated = potentialChats.find((pChat) => {
-          pChat._id === notification.senderId;
-        });
-        console.log(chatToBeCreated);
-      }
+
       //mark notifications as read
       const modifyNotifications = notifications.map((notif) => {
         if (notification.senderId === notif.senderId) {
@@ -224,6 +219,23 @@ export const ChatContextProvider = ({ children, user }) => {
       });
       updateCurrentChat(chatDesired);
       setNotifications(modifyNotifications);
+    },
+    []
+  );
+  const markThisUserNotificationsAsRead = useCallback(
+    (thisUserNotifications, notifications) => {
+      const mNotifications = notifications.map((not) => {
+        let notification;
+        thisUserNotifications.forEach((n) => {
+          if (n.senderId === not.senderId) {
+            notification = { ...n, isRead: true };
+          } else {
+            notification = not;
+          }
+        });
+        return notification;
+      });
+      setNotifications(mNotifications);
     },
     []
   );
@@ -247,6 +259,7 @@ export const ChatContextProvider = ({ children, user }) => {
         allUsers,
         markAllNotificationsAsRead,
         markNotificationAsRead,
+        markThisUserNotificationsAsRead,
       }}
     >
       {children}
