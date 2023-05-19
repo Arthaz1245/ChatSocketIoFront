@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
-  const { onlineUsers } = useContext(ChatContext);
+  const { onlineUsers, deleteChat } = useContext(ChatContext);
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
@@ -18,9 +18,14 @@ const UserChat = ({ chat, user }) => {
       role="button"
     >
       <div className="d-flex">
-        {/* <div>
-          <button onClick={() => handleDeleteChat(chat._id)}>x</button>
-        </div> */}
+        <div className="color-[#a92727]">
+          <span
+            className="color-[#575555df] bg-transparent"
+            onClick={() => deleteChat(chat._id)}
+          >
+            x
+          </span>
+        </div>
         <div className="me-2">
           <img src={avarter} height="35px" />
         </div>

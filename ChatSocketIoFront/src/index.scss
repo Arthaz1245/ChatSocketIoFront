@@ -27,6 +27,9 @@ body{
     position: relative;
     border-bottom: 1px solid rgb(100, 100, 100);
     width: 380px;
+        @media (max-width: 768px) {
+                width: 100%; // Full width on smaller screens
+            }
 }
 
 .user-card .text-content {
@@ -72,10 +75,16 @@ body{
     overflow-y: auto;
     background: rgb(25, 25, 25);
     border-radius: 10px;
+        @media (max-width: 576px) {
+                padding: 0.5rem; // Reduce padding on smaller screens
+            }
 }
 
 .messages-box {
     height: 85vh;
+    @media (max-width: 576px) {
+            height: 60vh; // Hide online/offline status on smaller screens
+        }
   
 }
 
@@ -87,6 +96,10 @@ body{
     padding: 0.75rem;
     color: white;
     background: rgb(30, 30, 30);
+    @media (max-width: 576px) {
+            padding: 0.25rem; // Further reduce padding on smaller screens
+            font-size: 16px; // Further adjust font size on smaller screens
+        }
 }
 
 /* Messages */
@@ -102,6 +115,9 @@ body{
     padding: 0.75rem;
     border-radius: 5px;
     max-width: 50%;
+    @media (max-width: 576px) {
+            max-width: 90%; // Decrease the message width on smaller screens
+        }
 }
 
 .message.self {
@@ -154,6 +170,7 @@ body{
     background: #181d31;
     color: white;
     z-index: 5;
+   
 }
 
 .notifications-header {
@@ -166,12 +183,18 @@ body{
 .notifications-box h3 {
     font-weight: 700;
     font-size: 20px;
+    @media (max-width: 576px) {
+         font-size: 12px;
+        }
 }
 
 .mark-as-read {
     cursor: pointer;
     font-weight: 700;
     opacity: 0.8;
+    @media (max-width: 576px) {
+            font-size: 12px;
+        }
 }
 
 .notification {
