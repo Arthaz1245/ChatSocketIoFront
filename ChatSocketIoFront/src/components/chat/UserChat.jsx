@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipientUser(chat, user);
-  const { onlineUsers, deleteChat } = useContext(ChatContext);
+  const { onlineUsers, deleteChat, notifications } = useContext(ChatContext);
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
