@@ -170,9 +170,16 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [deletedChat, currentChat]);
 
   const sendTextMessage = useCallback(
-    async (textMessage, sender, currentChatId, setTextMessage) => {
-      if (!textMessage) {
-        return console.log("You must type something");
+    async (
+      textMessage,
+      sender,
+      currentChatId,
+      setTextMessage,
+      image,
+      setImage
+    ) => {
+      if (!textMessage && !image) {
+        return console.log("You must type something or send an image");
       }
       const response = await postRequest(
         `${baseUrl}/messages`,
@@ -180,6 +187,7 @@ export const ChatContextProvider = ({ children, user }) => {
           chatId: currentChatId,
           senderId: sender._id,
           text: textMessage,
+          image: image ? image : null,
         })
       );
       if (response.error) {
@@ -188,6 +196,7 @@ export const ChatContextProvider = ({ children, user }) => {
       setNewMessage(response);
       setMessages((prev) => [...prev, response]);
       setTextMessage("");
+      setImage(null);
     },
     []
   );

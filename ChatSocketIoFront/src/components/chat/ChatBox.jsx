@@ -11,8 +11,10 @@ const ChatBox = () => {
     useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
+  const [image, setImage] = useState(null);
   const scroll = useRef();
   //to scroll messages
+
   useEffect(() => {
     scroll.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
@@ -35,6 +37,21 @@ const ChatBox = () => {
       <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>
     );
   }
+  const handleImgtext = (e) => {
+    const file = e.target.files[0];
+    transformFile(file);
+  };
+  const transformFile = (file) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+    } else {
+      setImage(null);
+    }
+  };
 
   return (
     <Stack gap={4} className="chat-box">
@@ -54,6 +71,9 @@ const ChatBox = () => {
               ref={scroll}
             >
               <span>{message?.text}</span>
+
+              <img src={message?.image} alt="" className="" />
+
               <span className="message-footer">
                 {moment(message.createdAt).calendar()}
               </span>
@@ -67,10 +87,19 @@ const ChatBox = () => {
           fontFamily="nunito"
           borderColor="rga(72,112,223,0.2)"
         />
+        <input type="file" accept="/*" onChange={handleImgtext} />
+
         <button
           className="send-btn"
           onClick={() =>
-            sendTextMessage(textMessage, user, currentChat?._id, setTextMessage)
+            sendTextMessage(
+              textMessage,
+              user,
+              currentChat?._id,
+              setTextMessage,
+              image,
+              setImage
+            )
           }
         >
           <svg
