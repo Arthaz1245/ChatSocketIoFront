@@ -224,7 +224,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
       try {
         const response = await axios.post(
-          `https://chatback-olag.onrender.com`,
+          `https://chatback-olag.onrender.com/messages`,
           formData,
           {
             headers: {
