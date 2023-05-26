@@ -19,6 +19,7 @@ body{
     border-radius: 10px;
     margin-right: 0.5rem;
     position: relative;
+  
 }
 
 /* User Card */
@@ -122,7 +123,7 @@ body{
 
 .message.self {
     color: white;
-    background: #07f417;
+    background: #198754;
 }
 
 .message-footer {
@@ -140,7 +141,7 @@ body{
 
 .send-btn {
     border: none;
-    background: rgba(72, 112, 223, 1);
+    background: hsl(224, 70%, 58%);
     color: white;
     height: 40px;
     width: 40px;

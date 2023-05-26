@@ -37,21 +37,6 @@ const ChatBox = () => {
       <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>
     );
   }
-  const handleImgtext = (e) => {
-    const file = e.target.files[0];
-    transformFile(file);
-  };
-  const transformFile = (file) => {
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-    } else {
-      setImage(null);
-    }
-  };
 
   return (
     <Stack gap={4} className="chat-box">
@@ -71,8 +56,7 @@ const ChatBox = () => {
               ref={scroll}
             >
               <span>{message?.text}</span>
-
-              <img src={message?.image} alt="" className="" />
+              <img src={message?.image?.secure_url} alt="" className="" />
 
               <span className="message-footer">
                 {moment(message.createdAt).calendar()}
@@ -87,8 +71,25 @@ const ChatBox = () => {
           fontFamily="nunito"
           borderColor="rga(72,112,223,0.2)"
         />
-        <input type="file" accept="/*" onChange={handleImgtext} />
-
+        <label htmlFor="fileInput">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-image"
+            viewBox="0 0 16 16"
+          >
+            <path d="M13.25 2H2.75C1.784 2 1 2.784 1 3.75v8.5C1 13.216 1.784 14 2.75 14h10.5c.966 0 1.75-.784 1.75-1.75v-8.5C15 2.784 14.216 2 13.25 2zm0 1.75a.25.25 0 0 1 .25.25v7a.25.25 0 0 1-.25.25H2.75a.25.25 0 0 1-.25-.25v-7a.25.25 0 0 1 .25-.25h10.5zM10 5.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm2.5 2.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-3 2.5a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0z" />
+          </svg>
+        </label>
+        <input
+          id="fileInput"
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+          accept="image/*"
+          style={{ display: "none" }}
+        />
         <button
           className="send-btn"
           onClick={() =>

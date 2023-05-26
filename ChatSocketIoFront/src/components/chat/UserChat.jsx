@@ -15,7 +15,7 @@ const UserChat = ({ chat, user }) => {
     markThisUserNotificationsAsRead,
   } = useContext(ChatContext);
   const { latestMessage } = useFetchLatestMessage(chat);
-  console.log(latestMessage);
+
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
