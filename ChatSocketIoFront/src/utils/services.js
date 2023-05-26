@@ -1,4 +1,5 @@
-export const baseUrl = "http://localhost:5500";
+// export const baseUrl = "http://localhost:5500";
+export const baseUrl = "https://chatback-olag.onrender.com";
 export const postRequest = async (url, body) => {
   const response = await fetch(url, {
     method: "POST",
