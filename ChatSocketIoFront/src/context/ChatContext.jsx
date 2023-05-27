@@ -166,7 +166,6 @@ export const ChatContextProvider = ({ children, user }) => {
       setUserChats((prevChats) =>
         prevChats.filter((chat) => chat._id !== deletedChat)
       );
-      setCurrentChat(null);
     }
   }, [deletedChat, currentChat]);
 
@@ -201,50 +200,6 @@ export const ChatContextProvider = ({ children, user }) => {
     },
     []
   );
-  // const sendTextMessage = useCallback(
-  //   async (
-  //     textMessage,
-  //     sender,
-  //     currentChatId,
-  //     setTextMessage,
-  //     image,
-  //     setImage
-  //   ) => {
-  //     if (!textMessage && !image) {
-  //       return console.log("You must type something or send an image");
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append("chatId", currentChatId);
-  //     formData.append("senderId", sender._id);
-  //     formData.append("text", textMessage);
-  //     if (image) {
-  //       formData.append("image", image);
-  //     }
-
-  //     try {
-  //       const response = await axios.post(
-  //         `http://localhost:5500/messages`,
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       );
-
-  //       const newMessage = response.data;
-  //       setNewMessage(newMessage);
-  //       setMessages((prev) => [...prev, newMessage]);
-  //       setTextMessage("");
-  //       setImage(null);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setSendTextMessageError(error);
-  //     }
-  //   },
-  //   []
-  // );
 
   const markAllNotificationsAsRead = useCallback((notifications) => {
     const mNotifications = notifications.map((n) => {
