@@ -37,7 +37,25 @@ const ChatBox = () => {
       <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>
     );
   }
-
+  // const TransformFile = (file) => {
+  //   const reader = new FileReader();
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //     reader.onloadend = () => {
+  //       setImage(reader.result);
+  //     };
+  //   } else {
+  //     setImage("");
+  //   }
+  // };
+  // const handleMessageImage = (e) => {
+  //   const file = e.target.files[0];
+  //   TransformFile(file);
+  // };
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
+  };
+  console.log(image);
   return (
     <Stack gap={4} className="chat-box">
       <div className="chat-header">
@@ -56,6 +74,7 @@ const ChatBox = () => {
               ref={scroll}
             >
               <span>{message?.text}</span>
+
               <img src={message?.image?.secure_url} alt="" className="" />
 
               <span className="message-footer">
@@ -86,7 +105,7 @@ const ChatBox = () => {
         <input
           id="fileInput"
           type="file"
-          onChange={(e) => setImage(e.target.files[0])}
+          onChange={handleImageChange}
           accept="image/*"
           style={{ display: "none" }}
         />
