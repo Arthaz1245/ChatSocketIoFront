@@ -37,20 +37,23 @@ const ChatBox = () => {
       <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>
     );
   }
-  const TransformFile = (file) => {
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-    } else {
-      setImage("");
-    }
-  };
-  const handleMessageImage = (e) => {
-    const file = e.target.files[0];
-    TransformFile(file);
+  // const TransformFile = (file) => {
+  //   const reader = new FileReader();
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //     reader.onloadend = () => {
+  //       setImage(reader.result);
+  //     };
+  //   } else {
+  //     setImage("");
+  //   }
+  // };
+  // const handleMessageImage = (e) => {
+  //   const file = e.target.files[0];
+  //   TransformFile(file);
+  // };
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
   };
   console.log(image);
   return (
@@ -102,7 +105,7 @@ const ChatBox = () => {
         <input
           id="fileInput"
           type="file"
-          onChange={handleMessageImage}
+          onChange={handleImageChange}
           accept="image/*"
           style={{ display: "none" }}
         />

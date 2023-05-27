@@ -166,9 +166,43 @@ export const ChatContextProvider = ({ children, user }) => {
       setUserChats((prevChats) =>
         prevChats.filter((chat) => chat._id !== deletedChat)
       );
+      if (userChats.length > 0) {
+        setCurrentChat(userChats[userChats.length - 1]);
+      }
     }
   }, [deletedChat, currentChat]);
 
+  // const sendTextMessage = useCallback(
+  //   async (
+  //     textMessage,
+  //     sender,
+  //     currentChatId,
+  //     setTextMessage,
+  //     image,
+  //     setImage
+  //   ) => {
+  //     if (!textMessage && !image) {
+  //       return console.log("You must type something or send an image");
+  //     }
+  //     const response = await postRequest(
+  //       `${baseUrl}/messages`,
+  //       JSON.stringify({
+  //         chatId: currentChatId,
+  //         senderId: sender._id,
+  //         text: textMessage,
+  //         image: image ? image : null,
+  //       })
+  //     );
+  //     if (response.error) {
+  //       return setSendTextMessageError(response);
+  //     }
+  //     setNewMessage(response);
+  //     setMessages((prev) => [...prev, response]);
+  //     setTextMessage("");
+  //     setImage(null);
+  //   },
+  //   []
+  // );
   const sendTextMessage = useCallback(
     async (
       textMessage,
@@ -181,20 +215,22 @@ export const ChatContextProvider = ({ children, user }) => {
       if (!textMessage && !image) {
         return console.log("You must type something or send an image");
       }
-      const response = await postRequest(
-        `${baseUrl}/messages`,
-        JSON.stringify({
-          chatId: currentChatId,
-          senderId: sender._id,
-          text: textMessage,
-          image: image ? image : null,
-        })
-      );
+
+      const formData = new FormData();
+      formData.append("chatId", currentChatId);
+      formData.append("senderId", sender._id);
+      formData.append("text", textMessage);
+      if (image) {
+        formData.append("image", image);
+      }
+
+      const response = await axios.post(`${baseUrl}/messages`, formData);
       if (response.error) {
         return setSendTextMessageError(response);
       }
-      setNewMessage(response);
-      setMessages((prev) => [...prev, response]);
+
+      setNewMessage(response.data);
+      setMessages((prev) => [...prev, response.data]);
       setTextMessage("");
       setImage(null);
     },
