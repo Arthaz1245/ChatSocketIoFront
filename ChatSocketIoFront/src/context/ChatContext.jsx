@@ -233,7 +233,6 @@ export const ChatContextProvider = ({ children, user }) => {
       setMessages((prev) => [...prev, response.data]);
       setTextMessage("");
       setImage(null);
-      setPreviewImage(null);
     },
     []
   );
