@@ -166,7 +166,6 @@ export const ChatContextProvider = ({ children, user }) => {
       setUserChats((prevChats) =>
         prevChats.filter((chat) => chat._id !== deletedChat)
       );
-      setCurrentChat(null);
     }
   }, [deletedChat, currentChat]);
 
