@@ -1,7 +1,7 @@
 import avarter from "../../assets/avarter.svg";
 import { Stack } from "react-bootstrap";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipientUser";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import { unreadNotificationsFunc } from "../../utils/unreadNotifications";
 import { useFetchLatestMessage } from "../../hooks/useFetchLatestMessage";
@@ -15,7 +15,7 @@ const UserChat = ({ chat, user }) => {
     markThisUserNotificationsAsRead,
   } = useContext(ChatContext);
   const { latestMessage } = useFetchLatestMessage(chat);
-
+  const [isDeleted, setIsDeleted] = useState(false);
   const isOnline = onlineUsers?.some(
     (user) => user?.userId === recipientUser?._id
   );
@@ -44,12 +44,13 @@ const UserChat = ({ chat, user }) => {
     >
       <div className="d-flex">
         <div className="color-[#a92727]">
-          <span
+          <button
             className="color-[#575555df] bg-transparent"
-            onClick={() => deleteChat(chat._id)}
+            onClick={() => deleteChat(chat._id, setIsDeleted)}
+            disabled={isDeleted}
           >
             x
-          </span>
+          </button>
         </div>
         <div className="me-2">
           <img src={avarter} height="35px" />

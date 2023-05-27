@@ -140,11 +140,13 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [currentChat]);
   //create chat
 
-  const createChat = useCallback(async (firstId, secondId) => {
+  const createChat = useCallback(async (firstId, secondId, setBtnSelected) => {
+    setBtnSelected(true);
     const response = await postRequest(
       `${baseUrl}/chats/`,
       JSON.stringify({ firstId, secondId })
     );
+    setBtnSelected(false);
     if (response.error) {
       return console.log("error creating chat", response);
     }
@@ -153,11 +155,13 @@ export const ChatContextProvider = ({ children, user }) => {
 
   //delete chat
 
-  const deleteChat = useCallback(async (chatId) => {
+  const deleteChat = useCallback(async (chatId, setIsDeleted) => {
+    setIsDeleted(true);
     const response = await deleteRequest(`${baseUrl}/chats/${chatId}`);
     if (response.error) {
       return console.log("error deleting chat", response);
     }
+    setIsDeleted(false);
     setDeletedChat(chatId);
   }, []);
 
@@ -210,7 +214,9 @@ export const ChatContextProvider = ({ children, user }) => {
       currentChatId,
       setTextMessage,
       image,
-      setImage
+      setImage,
+      setPreview,
+      setIsSending
     ) => {
       if (!textMessage && !image) {
         return console.log("You must type something or send an image");
@@ -223,7 +229,7 @@ export const ChatContextProvider = ({ children, user }) => {
       if (image) {
         formData.append("image", image);
       }
-
+      setIsSending(true);
       const response = await axios.post(`${baseUrl}/messages`, formData);
       if (response.error) {
         return setSendTextMessageError(response);
@@ -233,6 +239,8 @@ export const ChatContextProvider = ({ children, user }) => {
       setMessages((prev) => [...prev, response.data]);
       setTextMessage("");
       setImage(null);
+      setPreview(null);
+      setIsSending(false);
     },
     []
   );
