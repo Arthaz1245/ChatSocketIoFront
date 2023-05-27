@@ -171,37 +171,6 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [deletedChat, currentChat]);
 
-  const sendTextMessage = useCallback(
-    async (
-      textMessage,
-      sender,
-      currentChatId,
-      setTextMessage,
-      image,
-      setImage
-    ) => {
-      if (!textMessage && !image) {
-        return console.log("You must type something or send an image");
-      }
-      const response = await postRequestWithImage(
-        `${baseUrl}/messages`,
-        JSON.stringify({
-          chatId: currentChatId,
-          senderId: sender._id,
-          text: textMessage,
-          image: image ? image : null,
-        })
-      );
-      if (response.error) {
-        return setSendTextMessageError(response);
-      }
-      setNewMessage(response.data);
-      setMessages((prev) => [...prev, response]);
-      setTextMessage("");
-      setImage(null);
-    },
-    []
-  );
   // const sendTextMessage = useCallback(
   //   async (
   //     textMessage,
@@ -214,38 +183,68 @@ export const ChatContextProvider = ({ children, user }) => {
   //     if (!textMessage && !image) {
   //       return console.log("You must type something or send an image");
   //     }
-
-  //     const formData = new FormData();
-  //     formData.append("chatId", currentChatId);
-  //     formData.append("senderId", sender._id);
-  //     formData.append("text", textMessage);
-  //     if (image) {
-  //       formData.append("image", image);
+  //     const response = await postRequestWithImage(
+  //       `${baseUrl}/messages`,
+  //       JSON.stringify({
+  //         chatId: currentChatId,
+  //         senderId: sender._id,
+  //         text: textMessage,
+  //         image: image ? image : null,
+  //       })
+  //     );
+  //     if (response.error) {
+  //       return setSendTextMessageError(response);
   //     }
-
-  //     try {
-  //       const response = await axios.post(
-  //         `https://chatback-olag.onrender.com/messages`,
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       );
-
-  //       const newMessage = response.data;
-  //       setNewMessage(newMessage);
-  //       setMessages((prev) => [...prev, newMessage]);
-  //       setTextMessage("");
-  //       setImage(null);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setSendTextMessageError(error);
-  //     }
+  //     setNewMessage(response.data);
+  //     setMessages((prev) => [...prev, response]);
+  //     setTextMessage("");
+  //     setImage(null);
   //   },
   //   []
   // );
+  const sendTextMessage = useCallback(
+    async (
+      textMessage,
+      sender,
+      currentChatId,
+      setTextMessage,
+      image,
+      setImage
+    ) => {
+      if (!textMessage && !image) {
+        return console.log("You must type something or send an image");
+      }
+
+      const formData = new FormData();
+      formData.append("chatId", currentChatId);
+      formData.append("senderId", sender._id);
+      formData.append("text", textMessage);
+      if (image) {
+        formData.append("image", image);
+      }
+
+      try {
+        const response = await axios.post(
+          `https://chatback-olag.onrender.com/messages`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        setNewMessage(response);
+        setMessages((prev) => [...prev, response]);
+        setTextMessage("");
+        setImage(null);
+      } catch (error) {
+        console.error(error);
+        setSendTextMessageError(error);
+      }
+    },
+    []
+  );
 
   const markAllNotificationsAsRead = useCallback((notifications) => {
     const mNotifications = notifications.map((n) => {
