@@ -195,7 +195,7 @@ export const ChatContextProvider = ({ children, user }) => {
       if (response.error) {
         return setSendTextMessageError(response);
       }
-      setNewMessage(response);
+      setNewMessage(response.data);
       setMessages((prev) => [...prev, response]);
       setTextMessage("");
       setImage(null);
