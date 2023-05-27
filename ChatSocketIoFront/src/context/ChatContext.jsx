@@ -28,7 +28,7 @@ export const ChatContextProvider = ({ children, user }) => {
   //socketIo
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io("https://socketioserverchat.onrender.com");
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();
