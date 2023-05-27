@@ -12,6 +12,9 @@ const ChatBox = () => {
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [isSending, setIsSending] = useState(false);
+
   const scroll = useRef();
   //to scroll messages
 
@@ -37,25 +40,23 @@ const ChatBox = () => {
       <p style={{ textAlign: "center", width: "100%" }}>Loading Chat ...</p>
     );
   }
-  // const TransformFile = (file) => {
-  //   const reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     reader.onloadend = () => {
-  //       setImage(reader.result);
-  //     };
-  //   } else {
-  //     setImage("");
-  //   }
-  // };
-  // const handleMessageImage = (e) => {
-  //   const file = e.target.files[0];
-  //   TransformFile(file);
-  // };
-  const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
+  const TransformFile = (file) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+    } else {
+      setPreview("");
+    }
   };
-  console.log(image);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    TransformFile(file);
+  };
+
   return (
     <Stack gap={4} className="chat-box">
       <div className="chat-header">
@@ -109,6 +110,7 @@ const ChatBox = () => {
           accept="image/*"
           style={{ display: "none" }}
         />
+
         <button
           className="send-btn"
           onClick={() =>
@@ -118,9 +120,12 @@ const ChatBox = () => {
               currentChat?._id,
               setTextMessage,
               image,
-              setImage
+              setImage,
+              setPreview,
+              setIsSending
             )
           }
+          disabled={isSending}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -134,6 +139,13 @@ const ChatBox = () => {
           </svg>
         </button>
       </Stack>
+      {preview && (
+        <img
+          src={preview?.secure_url}
+          alt="chosen"
+          style={{ height: "300px" }}
+        />
+      )}
     </Stack>
   );
 };
