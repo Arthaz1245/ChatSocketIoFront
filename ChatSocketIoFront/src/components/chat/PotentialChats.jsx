@@ -5,7 +5,7 @@ const PotentialChats = () => {
   const { user } = useContext(AuthContext);
   const [btnSelected, setBtnSelected] = useState(false);
   const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
-  console.log(btnSelected);
+
   return (
     <>
       <div className="all-users">
