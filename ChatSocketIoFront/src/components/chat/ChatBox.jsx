@@ -12,6 +12,7 @@ const ChatBox = () => {
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
   const [image, setImage] = useState(null);
+
   const scroll = useRef();
   //to scroll messages
 
